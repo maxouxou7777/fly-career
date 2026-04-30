@@ -3,130 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fly Career</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        :root { --primary: #00d1b2; --dark: #1a1a1a; --card: #2d2d2d; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: white; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background: var(--card); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 500px; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; background: #3d3d3d; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px; border: none; background: var(--primary); color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { opacity: 0.8; }
-        .hidden { display: none; }
-        #map { height: 300px; width: 100%; margin-top: 15px; border-radius: 10px; }
-        .aircraft-card { background: #3d3d3d; padding: 15px; margin: 10px 0; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
-        .aircraft-card:hover { border-color: var(--primary); }
-    </style>
+    <title>Eisy Fly Career | Hub de Compagnie</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Police Inter pour le texte, et JetBrains Mono pour l'aspect technique -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="container">
-        <!-- ÉCRAN 1 : CONNEXION -->
-        <div id="auth-screen">
-            <h2>Fly Career</h2>
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Mot de passe">
-            <button onclick="handleLogin()">Se connecter</button>
-            <button onclick="handleSignUp()" style="background: #4a4a4a;">Créer un compte</button>
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-text">Fly</span><span class="logo-sub">Career</span>
         </div>
+        <div class="nav-links">
+            <a href="app.html" class="btn-ghost">Se connecter</a>
+            <a href="app.html" class="btn-solid">Rejoinde l'aventure</a>
+        </div>
+    </nav>
 
-        <!-- ÉCRAN 2 : CHOIX DE L'AVION -->
-        <div id="setup-screen" class="hidden">
-            <h2>Bienvenue, Commandant</h2>
-            <p>Choisissez votre premier appareil :</p>
-            <div class="aircraft-card" onclick="setAircraft('Cessna 172')">
-                <strong>Cessna 172 Skyhawk</strong><br><small>Stable et sûr pour débuter</small>
+    <header class="hero">
+        <div class="grid-overlay"></div>
+        <div class="hero-content">
+            <div class="status-badge">
             </div>
-            <div class="aircraft-card" onclick="setAircraft('DR400')">
-                <strong>Robin DR400</strong><br><small>Vif et excellente visibilité</small>
+            <h1>LE TABLEAU DE BORD DE <br><span class="highlight">TA CARRIÈRE MSFS</span></h1>
+            <p>
+                Finis les vols sans but. Démarre en Cessna par exemple, cumule les heures, et achète toi un nouvel avion !
+            </p>
+            <div class="hero-buttons">
+                <a href="app.html" class="btn-solid btn-large">DÉMARRER LES MOTEURS</a>
+            </div>
+            
+            <!-- Petit détail technique pour la DA -->
+            <div class="tech-stats">
+                <div><span>Site:</span> ONLINE</div>
+                <div><span>MSFS:</span> COMPATIBLE</div>
             </div>
         </div>
+    </header>
 
-        <!-- ÉCRAN 3 : DASHBOARD -->
-        <div id="dash-screen" class="hidden">
-            <h2 id="welcome-msg">Tableau de bord</h2>
-            <div style="display: flex; justify-content: space-around; background: #3d3d3d; padding: 10px; border-radius: 10px;">
-                <div>💰 <span id="money-display">0</span>€</div>
-                <div>✈️ <span id="aircraft-display">---</span></div>
+    <section class="features">
+        <div class="feature-card">
+            <div class="card-header">
+                <span class="mono-tag">01</span>
+                <h3>Tracking en live</h3>
             </div>
-            <div id="map"></div>
-            <button onclick="sb.auth.signOut().then(() => location.reload())" style="background: #ff3860; margin-top: 20px;">Déconnexion</button>
+            <p>Un client ultra-léger qui envoie ta position, vitesse et altitude directement sur ton panel web.</p>
         </div>
-    </div>
+        <div class="feature-card">
+            <div class="card-header">
+                <span class="mono-tag">02</span>
+                <h3>Économie</h3>
+            </div>
+            <p>Ton compte en banque vit au rythme de tes atterrissages. Paie ton carburant, répare ton avion et loue de nouveaux appareils.</p>
+        </div>
+        <div class="feature-card">
+            <div class="card-header">
+                <span class="mono-tag">03</span>
+                <h3>De nombreux scénarios</h3>
+            </div>
+            <p>Des dizaines de missions générées selon ta localisation. Fret, passagers et autres, à toi de choisir...</p>
+        </div>
+    </section>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // --- CONFIGURATION ---
-        // On utilise 'supabase' (la lib) pour créer 'sb' (notre client)
-        const SUPABASE_URL = "https://ueexlkxupayizlxlbeur.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlZXhsa3h1cGF5aXpseGxiZXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NjE4ODYsImV4cCI6MjA5MzEzNzg4Nn0.cu6-HDMa4cGiog5FGwZqJvTNs3ygFXPkULORbKDnwFQ";
-        
-        // C'est ici que l'erreur se produisait : on utilise l'objet global 'supabase' fourni par le CDN
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <footer>
+        <p>FLY CAREER © 2026</p>
+    </footer>
 
-        let userSession = null;
-
-        // --- AUTHENTIFICATION ---
-        async function handleSignUp() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const { data, error } = await sb.auth.signUp({ email, password });
-            if (error) alert(error.message);
-            else alert("Vérifie tes emails pour confirmer l'inscription !");
-        }
-
-        async function handleLogin() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const { data, error } = await sb.auth.signInWithPassword({ email, password });
-            if (error) alert(error.message);
-            else checkProfile(data.user);
-        }
-
-        // --- LOGIQUE DE PROFIL ---
-        async function checkProfile(user) {
-            userSession = user;
-            // On cherche le profil dans la table 'profiles'
-            let { data: profile, error } = await sb.from('profiles').select('*').eq('id', user.id).single();
-
-            // Si le profil n'existe pas encore
-            if (!profile) {
-                const { data: newProfile, error: insError } = await sb.from('profiles').insert([{ id: user.id, username: user.email.split('@')[0] }]).select().single();
-                profile = newProfile;
-            }
-
-            document.getElementById('auth-screen').classList.add('hidden');
-
-            if (!profile || !profile.selected_aircraft) {
-                document.getElementById('setup-screen').classList.remove('hidden');
-            } else {
-                showDashboard(profile);
-            }
-        }
-
-        async function setAircraft(name) {
-            const { error } = await sb.from('profiles').update({ selected_aircraft: name }).eq('id', userSession.id);
-            if (error) alert(error.message);
-            else location.reload();
-        }
-
-        function showDashboard(profile) {
-            document.getElementById('setup-screen').classList.add('hidden');
-            document.getElementById('dash-screen').classList.remove('hidden');
-            document.getElementById('welcome-msg').innerText = "Cdt. " + profile.username;
-            document.getElementById('money-display').innerText = profile.money.toLocaleString();
-            document.getElementById('aircraft-display').innerText = profile.selected_aircraft;
-
-            // Init Carte
-            var map = L.map('map').setView([48.37, 2.78], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            L.marker([48.37, 2.78]).addTo(map).bindPopup('Votre ' + profile.selected_aircraft + ' est à LFPU');
-        }
-
-        // Check session au démarrage
-        sb.auth.getUser().then(({ data }) => { if (data.user) checkProfile(data.user); });
-
-    </script>
 </body>
 </html>
